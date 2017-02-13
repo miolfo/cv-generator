@@ -34,7 +34,6 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <div className='app'>
         <div className="left">
@@ -46,6 +45,9 @@ class App extends Component {
     );
   }
 
+/**
+ * Construct the PDF from the form
+ */
   refreshPdf(){
     this.settings.currentYLeft = this.settings.basicInfoYCoordLeft;
     this.settings.currentYRight = this.settings.basicInfoYCoordRight;
@@ -67,19 +69,29 @@ class App extends Component {
       pdf: pdfStr
     });
   }
-
+  /**
+   * Add a text item to top left of the document
+   * @param  {string} item
+   */
   addBasicInfoItemLeft(item){
     this.pdf.text(item, this.settings.basicInfoXCoordLeft, this.settings.currentYLeft);
     this.settings.currentYLeft += this.settings.basicInfoLineGap;
   }
   
+  
+  /**
+   * Add a text item to top right of the document
+   * @param  {} item
+   */
   addBasicInfoItemRight(item){
     this.pdf.text(item, this.settings.basicInfoXCoordRight, this.settings.currentYRight);
     this.settings.currentYRight += this.settings.basicInfoLineGap;
   }
 
-
-
+  /**
+   * Called whenever one of the user info fields are changed
+   * @param  {object} event event click
+   */
   userInfoChanged(event){
     event.preventDefault();
     this.setState({
@@ -88,8 +100,11 @@ class App extends Component {
   }
 }
 
-class PdfForm extends Component{
 
+/**
+ * Class that handles constructing the whole form for PDF creation
+ */
+class PdfForm extends Component{
   render(){
     return(
       <div>
@@ -100,16 +115,21 @@ class PdfForm extends Component{
   }
 }
 
+/**
+ * Class for creating a "large" entry with header and description text
+ */
+class LargeFieldForm extends Component{
+  render(){
+    
+  }
+}
+
+/**
+ * Form that contains the personal details of the user
+ */
 class UserInfoForm extends Component{
   constructor(){
     super();
-    this.state = {
-      name: "",
-      address: "",
-      phone: "",
-      email: ""
-    }
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   render(){
@@ -133,16 +153,12 @@ class UserInfoForm extends Component{
         </label>
       </form>
     );
-    //return (<div>asd</div>)
-  }
-
-  handleInputChange(event){
-    this.setState({
-      [event.target.name]: event.target.value
-    })
   }
 }
 
+/**
+ * Class that handles viewing the generated PDF file
+ */
 class PdfPreview extends Component{
   render(){
     return(
