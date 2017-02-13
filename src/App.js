@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import jsPDF from 'jspdf';
 import Util from './Util';
+import PdfBuilder from './PdfBuilder';
 
 class App extends Component {
   constructor(){
@@ -45,47 +46,13 @@ class App extends Component {
     );
   }
 
-/**
- * Construct the PDF from the form
- */
+
   refreshPdf(){
-    this.settings.currentYLeft = this.settings.basicInfoYCoordLeft;
-    this.settings.currentYRight = this.settings.basicInfoYCoordRight;
-    this.pdf = new jsPDF();
-    this.pdf.setFontType('bold');
-    this.pdf.setFontSize(this.settings.basicInfoFontSize);
-    this.addBasicInfoItemRight("CV");
-    this.addBasicInfoItemLeft(this.state.name);
-
-    this.pdf.setFontType('normal');
-    this.addBasicInfoItemRight(Util.getDateString());
-    this.addBasicInfoItemLeft(this.state.address);
-    this.addBasicInfoItemLeft(this.state.phone);
-    this.addBasicInfoItemLeft(this.state.email);
-    this.pdf.line(this.settings.basicInfoXCoordLeft-10, this.settings.currentYLeft, this.settings.basicInfoXCoordRight+30, this.settings.currentYLeft);
-
-    const pdfStr = this.pdf.output('datauristring');
+    const pdfBuilder = new PdfBuilder(this.settings);
+    const pdf = pdfBuilder.createPdf(this.state);
     this.setState({
-      pdf: pdfStr
+      pdf: pdf
     });
-  }
-  /**
-   * Add a text item to top left of the document
-   * @param  {string} item
-   */
-  addBasicInfoItemLeft(item){
-    this.pdf.text(item, this.settings.basicInfoXCoordLeft, this.settings.currentYLeft);
-    this.settings.currentYLeft += this.settings.basicInfoLineGap;
-  }
-  
-  
-  /**
-   * Add a text item to top right of the document
-   * @param  {} item
-   */
-  addBasicInfoItemRight(item){
-    this.pdf.text(item, this.settings.basicInfoXCoordRight, this.settings.currentYRight);
-    this.settings.currentYRight += this.settings.basicInfoLineGap;
   }
 
   /**
@@ -109,6 +76,7 @@ class PdfForm extends Component{
     return(
       <div>
         <UserInfoForm userInfoChanged={this.props.userInfoChanged} name={this.props.name} address={this.props.address} phone={this.props.phone} email={this.props.email}/>
+        <button type="button">Add field</button>
         <button type="button" onClick={this.props.refreshPdf}>Refresh PDF</button>
       </div>
     )
@@ -120,7 +88,6 @@ class PdfForm extends Component{
  */
 class LargeFieldForm extends Component{
   render(){
-    
   }
 }
 
