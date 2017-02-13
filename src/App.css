@@ -1,0 +1,23 @@
+.app{
+  height: 100vh;
+  background: lightgray;
+}
+
+.left{
+  float: left;
+}
+
+
+.pdf-preview{
+  text-align: right;
+}
+
+.pdf-frame{
+  width: 30%;
+  min-width: 400px;
+  height: 80vh
+}
+
+.default-text-input{
+  display: block;
+}
