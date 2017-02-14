@@ -25,7 +25,11 @@ class App extends Component {
       basicInfoYCoordLeft: 40,
       basicInfoYCoordRight: 40,
       currentYLeft: 40,
-      currentYRight: 40
+      currentYRight: 40,
+
+      maxLineLength: 160,
+      headerGap: 10,
+      largeFieldGap: 20
     }
 
 
