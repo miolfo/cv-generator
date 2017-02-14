@@ -14,6 +14,7 @@ class App extends Component {
       address: "", 
       phone: "",
       email: "",
+      largeFields: []
     }
 
     this.settings = {
@@ -32,14 +33,22 @@ class App extends Component {
 
     this.userInfoChanged = this.userInfoChanged.bind(this);
     this.refreshPdf = this.refreshPdf.bind(this);
+    this.addLargeField = this.addLargeField.bind(this);
+    this.deleteLargeField = this.deleteLargeField.bind(this);
+    this.largeFieldChanged = this.largeFieldChanged.bind(this);
   }
 
   render() {
     return (
       <div className='app'>
         <div className="left">
-        <PdfForm userInfoChanged={this.userInfoChanged} name={this.state.name} address={this.state.address} phone={this.state.phone} email={this.state.email}
-        refreshPdf={this.refreshPdf}/>
+        <PdfForm 
+          userInfoChanged={this.userInfoChanged} 
+          refreshPdf={this.refreshPdf} 
+          largeFields={this.state.largeFields} 
+          addLargeField={this.addLargeField} 
+          deleteLargeField={this.deleteLargeField}
+          largeFieldChanged={this.largeFieldChanged}/>
         </div>
         <PdfPreview pdf={this.state.pdf}/>
       </div>
@@ -55,6 +64,26 @@ class App extends Component {
     });
   }
 
+  addLargeField(){
+    const largeFields = this.state.largeFields;
+    largeFields.push({
+      header: "",
+      text: ""
+    });
+    this.setState({
+      largeFields: largeFields
+    })
+  }
+
+  deleteLargeField(index, event){
+    event.preventDefault();
+    const largeFields = this.state.largeFields;
+    largeFields.splice(index, 1);
+    this.setState({
+      largeFields: largeFields
+    });
+  }
+
   /**
    * Called whenever one of the user info fields are changed
    * @param  {object} event event click
@@ -65,6 +94,17 @@ class App extends Component {
       [event.target.name]: event.target.value
     })
   }
+
+  largeFieldChanged(index, event){
+    event.preventDefault();
+    const newValue = event.target.value;
+    const largeFields = this.state.largeFields.slice();
+    if(event.target.name==="largeFieldHeader") largeFields[index].header = newValue;
+    else largeFields[index].text = newValue;
+    this.setState({
+      largeFields: largeFields
+    });
+  }
 }
 
 
@@ -73,10 +113,19 @@ class App extends Component {
  */
 class PdfForm extends Component{
   render(){
+    const largeFields = this.props.largeFields.map((obj, index) => {
+      return <LargeFieldForm 
+      key={index} 
+      deleteLargeField={this.props.deleteLargeField.bind(null, index)} 
+      largeFieldChanged={this.props.largeFieldChanged.bind(null, index)}
+      largeFieldHeader={this.props.largeFields[index].header}
+      largeFieldText={this.props.largeFields[index].text}/>
+    });
     return(
       <div>
-        <UserInfoForm userInfoChanged={this.props.userInfoChanged} name={this.props.name} address={this.props.address} phone={this.props.phone} email={this.props.email}/>
-        <button type="button">Add field</button>
+        <UserInfoForm userInfoChanged={this.props.userInfoChanged}/>
+        {largeFields}
+        <button type="button" onClick={this.props.addLargeField}>Add field</button>
         <button type="button" onClick={this.props.refreshPdf}>Refresh PDF</button>
       </div>
     )
@@ -88,6 +137,19 @@ class PdfForm extends Component{
  */
 class LargeFieldForm extends Component{
   render(){
+    return(
+    <form>
+      <label>
+        Field header:
+        <input type="text" name="largeFieldHeader" onChange={this.props.largeFieldChanged} value={this.props.largeFieldHeader} className="default-text-input"/>
+      </label>
+      <label>
+        Field description:
+        <textarea name="largeFieldText" onChange={this.props.largeFieldChanged} value={this.props.largeFieldText} className="default-text-input"/>
+      </label>
+      <button onClick={this.props.deleteLargeField}>X</button>
+    </form>
+    );
   }
 }
 
@@ -101,22 +163,22 @@ class UserInfoForm extends Component{
 
   render(){
     return (
-      <form className="user-info-form">
+      <form>
         <label>
           Name: 
-          <input type="text" name="name" className="default-text-input" value={this.props.name} onChange={this.props.userInfoChanged}/>
+          <input type="text" name="name" className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
         <label>
           Address: 
-          <input type="text" name="address" className="default-text-input" value={this.props.address} onChange={this.props.userInfoChanged}/>
+          <input type="text" name="address" className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
         <label>
           Phone: 
-          <input type="text" name="phone" className="default-text-input" value={this.props.phone} onChange={this.props.userInfoChanged}/>
+          <input type="text" name="phone" className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
         <label>
           Email: 
-          <input type="email" name="email" className="default-text-input" value={this.props.email} onChange={this.props.userInfoChanged}/>
+          <input type="email" name="email" className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
       </form>
     );
