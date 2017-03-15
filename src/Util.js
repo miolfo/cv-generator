@@ -1,7 +1,7 @@
 const Util = {
     getDateString: function(){
         const date = new Date();
-        const dateStr = this.leftPadDateZero(date.getDate().toString()) + "." + this.leftPadDateZero(date.getMonth().toString()) + "." + date.getFullYear();
+        const dateStr = this.leftPadDateZero(date.getDate().toString()) + "." + this.leftPadDateZero((date.getMonth()+1).toString()) + "." + date.getFullYear();
         return dateStr; 
     },
 

@@ -4,6 +4,8 @@ import Util from './Util';
 class PdfBuilder{
     constructor(settings){
         this.settings = settings;
+        //Create a clone of settings
+        this.originalSettings = JSON.parse(JSON.stringify(settings));
         this.pdf = null;
     }
 
@@ -13,6 +15,8 @@ class PdfBuilder{
      * as well as the info for larger fields in an array
      */
     createPdf(data){
+        //Restore a clone of original settings
+        this.settings = JSON.parse(JSON.stringify(this.originalSettings));
         this.settings.currentYLeft = this.settings.basicInfoYCoordLeft;
         this.settings.currentYRight = this.settings.basicInfoYCoordRight;
         this.pdf = new jsPDF();
@@ -35,6 +39,7 @@ class PdfBuilder{
         data.largeFields.forEach((obj) => {
             this.addLargeInfoItem(obj);
         });
+        console.log(this.settings.currentYLeft);
 
         const pdfStr = this.pdf.output('datauristring');
         return pdfStr;
@@ -63,12 +68,20 @@ class PdfBuilder{
      * @param  {object} item object with header and text
      */
     addLargeInfoItem(item){
+        //Check if a page break should happen
+        //Split the larger text into multiple lines and increment currentYLeft as supposed
+        const splitText = this.pdf.splitTextToSize(item.text, this.settings.maxLineLength);
+        if((splitText.length * (this.pdf.getTextDimensions('Text').h / 2)) + this.settings.currentYLeft > 300){
+            this.pdf.addPage();
+            //If a page was added, reset the settings to original
+            this.settings.currentYLeft = this.originalSettings.currentYLeft;
+        }
+
         this.pdf.setFontType('bold');
         this.pdf.text(item.header, this.settings.basicInfoXCoordLeft, this.settings.currentYLeft);
         this.pdf.setFontType('normal');
         this.settings.currentYLeft += this.settings.headerGap;
-        //Split the larger text into multiple lines and increment currentYLeft as supposed
-        const splitText = this.pdf.splitTextToSize(item.text, this.settings.maxLineLength);
+        
         this.pdf.text(splitText, this.settings.basicInfoXCoordLeft, this.settings.currentYLeft);
         this.settings.currentYLeft += (splitText.length * (this.pdf.getTextDimensions('Text').h / 2));
     }
