@@ -10,10 +10,10 @@ class App extends Component {
     super();
     this.state = {
       pdf: "",
-      name: "",
-      address: "", 
-      phone: "",
-      email: "",
+      name: "Joel Spectre",
+      address: "Circusroad 37", 
+      phone: "+358 123 4567",
+      email: "joel@spectre.com",
       largeFields: []
     }
 
@@ -52,7 +52,11 @@ class App extends Component {
           largeFields={this.state.largeFields} 
           addLargeField={this.addLargeField} 
           deleteLargeField={this.deleteLargeField}
-          largeFieldChanged={this.largeFieldChanged}/>
+          largeFieldChanged={this.largeFieldChanged}
+          userName={this.state.name}
+          userAddress={this.state.address}
+          userPhone={this.state.phone}
+          userEmail={this.state.email}/>
         </div>
         <PdfPreview pdf={this.state.pdf}/>
       </div>
@@ -71,8 +75,8 @@ class App extends Component {
   addLargeField(){
     const largeFields = this.state.largeFields;
     largeFields.push({
-      header: "",
-      text: ""
+      header: "Sample header text",
+      text: Util.loremIpsum
     });
     this.setState({
       largeFields: largeFields
@@ -127,7 +131,8 @@ class PdfForm extends Component{
     });
     return(
       <div>
-        <UserInfoForm userInfoChanged={this.props.userInfoChanged}/>
+        <UserInfoForm userInfoChanged={this.props.userInfoChanged} userName={this.props.userName}
+        userAddress={this.props.userAddress} userPhone={this.props.userPhone} userEmail={this.props.userEmail}/>
         {largeFields}
         <button type="button" onClick={this.props.addLargeField}>Add field</button>
         <button type="button" onClick={this.props.refreshPdf}>Refresh PDF</button>
@@ -170,19 +175,19 @@ class UserInfoForm extends Component{
       <form>
         <label>
           Name: 
-          <input type="text" name="name" className="default-text-input" onChange={this.props.userInfoChanged}/>
+          <input type="text" name="name" value={this.props.userName} className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
         <label>
           Address: 
-          <input type="text" name="address" className="default-text-input" onChange={this.props.userInfoChanged}/>
+          <input type="text" name="address" value={this.props.userAddress} className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
         <label>
           Phone: 
-          <input type="text" name="phone" className="default-text-input" onChange={this.props.userInfoChanged}/>
+          <input type="text" name="phone" value={this.props.userPhone} className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
         <label>
           Email: 
-          <input type="email" name="email" className="default-text-input" onChange={this.props.userInfoChanged}/>
+          <input type="email" name="email" value={this.props.userEmail} className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
       </form>
     );
@@ -201,5 +206,7 @@ class PdfPreview extends Component{
     );
   }
 }
+
+//Create dummydata
 
 export default App;
