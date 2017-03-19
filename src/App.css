@@ -1,10 +1,78 @@
+/*
+  PALETTE:
+011627
+FDFFFC
+
+2EC4B6
+E71D36
+FF9F1C
+*/
+
+body{
+  color: #011627;
+}
+
+button{
+  background: #E71D36;
+  border: none;
+  margin: 5px;
+  box-shadow: 2px 2px 1px #011627;
+}
+
+label{
+  margin-top: 10px;
+  display: block;
+}
+
+input[type=text]{
+  width: 400px;
+}
+
+textarea{
+  width: 400px;
+  resize: none;
+  height: 150px;
+}
+
 .app{
   height: 100vh;
-  background: lightgray;
+  background: #FDFFFC;
+}
+
+.header{
+  height: 50px;
+  background: #011627;
 }
 
 .left{
   float: left;
+}
+
+.user-info-form{
+  background: #E71D36;
+  padding: 15px;
+  margin: 5px;
+  box-shadow: 2px 2px 2px #011627;
+}
+
+.delete-large-field-button{
+  float: right;
+  box-shadow: none;
+  border: 1px solid #011627;
+
+}
+
+.large-field{
+  margin-top: 20px;
+  border-top: 1px dotted #011627; 
+  width: 100%;
+}
+
+.large-fields{
+  background: #E71D36;
+  padding: 15px;
+  margin: 5px;
+  box-shadow: 2px 2px 2px #011627;
 }
 
 
@@ -13,7 +81,7 @@
 }
 
 .pdf-frame{
-  width: 30%;
+  width: 50%;
   min-width: 400px;
   height: 80vh
 }

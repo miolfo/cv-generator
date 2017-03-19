@@ -45,6 +45,8 @@ class App extends Component {
   render() {
     return (
       <div className='app'>
+        <div className='header'>
+        </div>
         <div className="left">
         <PdfForm 
           userInfoChanged={this.userInfoChanged} 
@@ -133,7 +135,9 @@ class PdfForm extends Component{
       <div>
         <UserInfoForm userInfoChanged={this.props.userInfoChanged} userName={this.props.userName}
         userAddress={this.props.userAddress} userPhone={this.props.userPhone} userEmail={this.props.userEmail}/>
-        {largeFields}
+        <div className="large-fields">
+          {largeFields}
+        </div>
         <button type="button" onClick={this.props.addLargeField}>Add field</button>
         <button type="button" onClick={this.props.refreshPdf}>Refresh PDF</button>
       </div>
@@ -147,7 +151,8 @@ class PdfForm extends Component{
 class LargeFieldForm extends Component{
   render(){
     return(
-    <form>
+    <form className="large-field">
+      <button className="delete-large-field-button" onClick={this.props.deleteLargeField}>X</button>
       <label>
         Field header:
         <input type="text" name="largeFieldHeader" onChange={this.props.largeFieldChanged} value={this.props.largeFieldHeader} className="default-text-input"/>
@@ -156,7 +161,6 @@ class LargeFieldForm extends Component{
         Field description:
         <textarea name="largeFieldText" onChange={this.props.largeFieldChanged} value={this.props.largeFieldText} className="default-text-input"/>
       </label>
-      <button onClick={this.props.deleteLargeField}>X</button>
     </form>
     );
   }
@@ -172,7 +176,7 @@ class UserInfoForm extends Component{
 
   render(){
     return (
-      <form>
+      <form className="user-info-form">
         <label>
           Name: 
           <input type="text" name="name" value={this.props.userName} className="default-text-input" onChange={this.props.userInfoChanged}/>
@@ -187,7 +191,7 @@ class UserInfoForm extends Component{
         </label>
         <label>
           Email: 
-          <input type="email" name="email" value={this.props.userEmail} className="default-text-input" onChange={this.props.userInfoChanged}/>
+          <input type="text" name="email" value={this.props.userEmail} className="default-text-input" onChange={this.props.userInfoChanged}/>
         </label>
       </form>
     );
@@ -201,12 +205,10 @@ class PdfPreview extends Component{
   render(){
     return(
     <div className='pdf-preview'>
-      <iframe className='pdf-frame' src={this.props.pdf} />
+      <iframe className='pdf-frame' src={this.props.pdf}width="" height="" border="0" />
     </div>
     );
   }
 }
-
-//Create dummydata
 
 export default App;
