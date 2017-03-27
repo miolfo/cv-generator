@@ -35,14 +35,30 @@ class PdfBuilder{
         //After basic info is laid out, set currentYLeft to position of larger fields starting point
         this.settings.currentYLeft += this.settings.largeFieldGap;
 
-        //Large fields
-        data.largeFields.forEach((obj) => {
+        //Large fields and main headers
+        let prevMainHeader = "";
+        if(data.largeFields.length > 0){
+            prevMainHeader = data.largeFields[0].mainHeader;
+        }
+
+        data.largeFields.forEach((obj, index) => {
+            if((prevMainHeader !== obj.mainHeader || index === 0) && prevMainHeader !== "" && prevMainHeader !== undefined){
+                this.addMainHeader(obj.mainHeader);
+            }
+            prevMainHeader = obj.mainHeader;
             this.addLargeInfoItem(obj);
         });
-        console.log(this.settings.currentYLeft);
 
         const pdfStr = this.pdf.output('datauristring');
         return pdfStr;
+    }
+
+    addMainHeader(item){
+        const upper = item.toUpperCase();
+        this.pdf.setFontType('bold');
+        this.pdf.text(upper, this.settings.basicInfoXCoordLeft, this.settings.currentYLeft);
+        this.settings.currentYLeft += this.settings.basicInfoLineGap;
+        this.pdf.setFontType('normal');
     }
 
     /**
