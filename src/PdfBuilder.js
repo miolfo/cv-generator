@@ -35,17 +35,8 @@ class PdfBuilder{
         //After basic info is laid out, set currentYLeft to position of larger fields starting point
         this.settings.currentYLeft += this.settings.largeFieldGap;
 
-        //Large fields and main headers
-        let prevMainHeader = "";
-        if(data.largeFields.length > 0){
-            prevMainHeader = data.largeFields[0].mainHeader;
-        }
-
         data.largeFields.forEach((obj, index) => {
-            if((prevMainHeader !== obj.mainHeader || index === 0) && prevMainHeader !== "" && prevMainHeader !== undefined){
-                this.addMainHeader(obj.mainHeader);
-            }
-            prevMainHeader = obj.mainHeader;
+            if(obj.showMainHeader) this.addMainHeader(obj.mainHeader);
             this.addLargeInfoItem(obj);
         });
 

@@ -82,6 +82,7 @@ class App extends Component {
   addLargeField(){
     const largeFields = this.state.largeFields;
     largeFields.push({
+      showMainHeader: false,
       mainHeader: "too hard",
       header: "Sample header text",
       text: Util.loremIpsum
@@ -91,10 +92,20 @@ class App extends Component {
     })
   }
 
+
   addHeader(){
-    const headers = this.state.headers;
-    headers.push("sampleheader");
+    const largeFields = this.state.largeFields;
+    largeFields.push({
+      showMainHeader: true,
+      mainHeader: "too hard",
+      header: "Sample header text",
+      text: Util.loremIpsum
+    });
+    this.setState({
+      largeFields: largeFields
+    })
   }
+
 
   deleteLargeField(index, event){
     event.preventDefault();

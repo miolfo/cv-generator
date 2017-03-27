@@ -7,19 +7,10 @@ import UserInfoForm from './UserInfoForm';
  */
 class PdfForm extends Component{
   render(){
-    let prevMainHeader = "";
-    if(this.props.largeFields.length > 0){
-        prevMainHeader = this.props.largeFields[0].mainHeader;
-    }
-
     const largeFields = this.props.largeFields.map((obj, index) => {
-        let showMainHeader = false;
-        if((prevMainHeader !== obj.mainHeader || index === 0) && prevMainHeader !== "" && prevMainHeader !== undefined){
-            showMainHeader = true;
-        }
         return <LargeFieldForm 
         key={index} 
-        showMainHeader={showMainHeader}
+        showMainHeader={obj.showMainHeader}
         deleteLargeField={this.props.deleteLargeField.bind(null, index)} 
         largeFieldChanged={this.props.largeFieldChanged.bind(null, index)}
         largeFieldHeader={this.props.largeFields[index].header}
@@ -34,7 +25,7 @@ class PdfForm extends Component{
           {largeFields}
         </div>
         <button type="button" onClick={this.props.addLargeField}>Add field</button>
-        <button type="button">Add header</button>
+        <button type="button" onClick={this.props.addHeader}>Add field with header</button>
         <button type="button" onClick={this.props.refreshPdf}>Refresh PDF</button>
       </div>
     )
